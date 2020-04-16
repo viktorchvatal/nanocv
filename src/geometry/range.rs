@@ -8,7 +8,7 @@ use std::{cmp::{min, max}, ops::Sub};
 /// # Examples
 /// Create a new range
 /// ```
-/// use nanocv::Range;
+/// use nanocv::geometry::Range;
 /// let range = Range::new(1..4);
 /// # assert_eq!(range.start, 1);
 /// # assert_eq!(range.end, 4);
@@ -17,7 +17,7 @@ use std::{cmp::{min, max}, ops::Sub};
 /// 
 /// Test that `start` and `end` bounds are correctly set
 /// ```
-/// # use nanocv::Range;
+/// # use nanocv::geometry::Range;
 /// # let range = Range::<u32>::from(1..4);
 /// assert_eq!(range.start, 1);
 /// assert_eq!(range.end, 4);
@@ -26,7 +26,7 @@ use std::{cmp::{min, max}, ops::Sub};
 /// 
 /// Test that `Range` length gets correctly computed
 /// ```
-/// # use nanocv::Range;
+/// # use nanocv::geometry::Range;
 /// # let range = Range::<u32>::from(1..4);
 /// # assert_eq!(range.start, 1);
 /// # assert_eq!(range.end, 4);
@@ -39,12 +39,25 @@ pub struct Range<T> {
 }
 
 impl<T> Range<T> {
+    /// New Range instance from system::ops::Range
+    /// ```
+    /// use nanocv::geometry::Range;
+    /// let range = Range::new(1..4);
+    ///  assert_eq!(range.start, 1);
+    ///  assert_eq!(range.end, 4);
+    /// ```
     pub fn new(range: std::ops::Range<T>) -> Self {
         Self { start: range.start, end: range.end }
     }
 }
 
 impl<T: Sub<Output=T> + Copy> Range<T> {
+    /// Range length (number of elements a range includes)
+    /// ```
+    ///  use nanocv::geometry::Range;
+    ///  let range = Range::<u32>::from(2..5);
+    ///  assert_eq!(range.length(), 3);
+    /// ```    
     pub fn length(&self) -> T {
         self.end - self.start
     }
@@ -67,7 +80,7 @@ impl<T: Ord + Copy> Range<T> {
     ///
     /// # Example
     /// ```
-    /// use nanocv::Range;
+    /// use nanocv::geometry::Range;
     /// assert_eq!(
     ///     Range::new(1..3).intersect(&Range::new(2..4)),
     ///     Range::new(2..3)

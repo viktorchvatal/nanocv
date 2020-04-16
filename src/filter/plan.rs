@@ -1,5 +1,5 @@
 use std::cmp::{min, max};
-use crate::Range;
+use crate::geometry::Range;
 
 /// A recipe for one iteration of a convolution filter
 /// 
