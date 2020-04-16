@@ -49,3 +49,22 @@ impl<T: Sub<Output=T> + Copy> Range2d<T> {
         self.y.length()
     }
 }
+
+impl<T: Ord + Copy> Range2d<T> {
+    /// Intersection of two 2D ranges
+    ///
+    /// # Example
+    /// ```
+    /// use nanocv::Range2d;
+    /// assert_eq!(
+    ///     Range2d::new(0..2, 1..3).intersect(&Range2d::new(1..3, 2..5)),
+    ///     Range2d::new(1..2, 2..3)
+    /// );
+    /// ```
+    pub fn intersect(&self, other: &Range2d<T>) -> Self {
+        Self {
+            x: self.x.intersect(&other.x),
+            y: self.y.intersect(&other.y),
+        }
+    }
+}

@@ -1,4 +1,4 @@
-use std::ops::Sub;
+use std::{cmp::{min, max}, ops::Sub};
 
 /// A half-open range bounded from start (inclusive) to end (exclusive).
 /// 
@@ -52,12 +52,28 @@ impl<T: Sub<Output=T> + Copy> Range<T> {
 
 impl<T> From<std::ops::Range<T>> for Range<T> {
     fn from(range: std::ops::Range<T>) -> Self {
-        Range::new(range)
+        Self::new(range)
     }
 }
 
 impl From<Range<isize>> for Range<usize> {
     fn from(range: Range<isize>) -> Self {
-        Range::new(range.start as usize..range.end as usize)
+        Self::new(range.start as usize..range.end as usize)
+    }
+}
+
+impl<T: Ord + Copy> Range<T> {
+    /// Intersection of two ranges
+    ///
+    /// # Example
+    /// ```
+    /// use nanocv::Range;
+    /// assert_eq!(
+    ///     Range::new(1..3).intersect(&Range::new(2..4)),
+    ///     Range::new(2..3)
+    /// );
+    /// ```
+    pub fn intersect(&self, other: &Range<T>) -> Self {
+        Self::new(max(self.start, other.start)..min(self.end, other.end))
     }
 }
