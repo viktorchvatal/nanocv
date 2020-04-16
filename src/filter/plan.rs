@@ -33,39 +33,34 @@ pub fn create_filter_plan(
     start: usize,
     end: usize,
 ) -> Vec<FilterIteration> {
-    let center = (kernel_size - 1) / 2;
+    let center = ((kernel_size - 1) / 2) as isize;
     let first = - (center as isize);
     let last = kernel_size as isize - center as isize;
 
     (first..last)
-        .map(|position| iteration(position, center, length, start, end))
+        .map(|position| iteration(
+            position, center, length as isize, start as isize, end as isize
+        ))
         .collect()
 }
 
 fn iteration(
     shift: isize, 
-    levels: usize, 
-    length: usize, 
-    start: usize, 
-    end: usize
+    levels: isize, 
+    length: isize, 
+    start: isize, 
+    end: isize
 ) -> FilterIteration {
-    let src_range = Range::new(
-        max(0, start as isize + shift) as usize
-        ..min(length as isize, end as isize + shift) as usize
-    );
+    let src_range = Range::new(max(0, start + shift)..min(length, end + shift));
 
     FilterIteration { 
-        src_range,
-        dst_range: Range::new(
-            (src_range.start as isize - shift) as usize
-            ..(src_range.end as isize - shift) as usize
+        src_range: Range::from(src_range),
+        dst_range: Range::from(
+            Range::new((src_range.start - shift)..(src_range.end - shift))
         ),
-        kernel_index: (levels as isize - shift) as usize,
-        outside_start: max(0, - (start as isize + shift as isize)) as usize,
-        outside_end: max(
-            0, 
-            end as isize - length as isize + shift as isize
-        ) as usize,
+        kernel_index: (levels - shift) as usize,
+        outside_start: max(0, - (start + shift)) as usize,
+        outside_end: max(0, end - length + shift) as usize,
     }
 }
 
@@ -79,7 +74,6 @@ mod tests {
     fn kernel_size_1_image_size_3_from_0_to_3() {
         assert_eq!(
             create_filter_plan(3, 1, 0, 3),
-            // One expected iteration
             vec![
                 FilterIteration {
                     src_range: Range::new(0..3),
@@ -96,7 +90,6 @@ mod tests {
     fn kernel_size_1_image_size_3_from_1_to_2() {
         assert_eq!(
             create_filter_plan(3, 1, 1, 2),
-            // One expected iteration
             vec![
                 FilterIteration {
                     src_range: Range::new(1..2),
@@ -105,6 +98,96 @@ mod tests {
                     outside_start: 0,
                     outside_end: 0
                 }
+            ]
+        )
+    } 
+
+    #[test]
+    fn kernel_size_3_image_size_3_from_0_to_3() {
+        assert_eq!(
+            create_filter_plan(3, 3, 0, 3),
+            vec![
+                FilterIteration {
+                    src_range: Range::new(0..2),
+                    dst_range: Range::new(1..3),
+                    kernel_index: 2,
+                    outside_start: 1,
+                    outside_end: 0
+                },
+                FilterIteration {
+                    src_range: Range::new(0..3),
+                    dst_range: Range::new(0..3),
+                    kernel_index: 1,
+                    outside_start: 0,
+                    outside_end: 0
+                },
+                FilterIteration {
+                    src_range: Range::new(1..3),
+                    dst_range: Range::new(0..2),
+                    kernel_index: 0,
+                    outside_start: 0,
+                    outside_end: 1
+                },                                
+            ]
+        )
+    }    
+
+    #[test]
+    fn kernel_size_3_image_size_3_from_1_to_2() {
+        assert_eq!(
+            create_filter_plan(3, 3, 1, 2),
+            vec![
+                FilterIteration {
+                    src_range: Range::new(0..1),
+                    dst_range: Range::new(1..2),
+                    kernel_index: 2,
+                    outside_start: 0,
+                    outside_end: 0
+                },
+                FilterIteration {
+                    src_range: Range::new(1..2),
+                    dst_range: Range::new(1..2),
+                    kernel_index: 1,
+                    outside_start: 0,
+                    outside_end: 0
+                },
+                FilterIteration {
+                    src_range: Range::new(2..3),
+                    dst_range: Range::new(1..2),
+                    kernel_index: 0,
+                    outside_start: 0,
+                    outside_end: 0
+                },                                
+            ]
+        )
+    }   
+    
+    #[test]
+    fn kernel_size_3_image_size_1_from_0_to_1() {
+        assert_eq!(
+            create_filter_plan(1, 3, 0, 1),
+            vec![
+                FilterIteration {
+                    src_range: Range::new(0..0),
+                    dst_range: Range::new(1..1),
+                    kernel_index: 2,
+                    outside_start: 1,
+                    outside_end: 0
+                },
+                FilterIteration {
+                    src_range: Range::new(0..1),
+                    dst_range: Range::new(0..1),
+                    kernel_index: 1,
+                    outside_start: 0,
+                    outside_end: 0
+                },
+                FilterIteration {
+                    src_range: Range::new(1..1),
+                    dst_range: Range::new(0..0),
+                    kernel_index: 0,
+                    outside_start: 0,
+                    outside_end: 1
+                },                                
             ]
         )
     }    

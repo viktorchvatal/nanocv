@@ -55,3 +55,9 @@ impl<T> From<std::ops::Range<T>> for Range<T> {
         Range::new(range)
     }
 }
+
+impl From<Range<isize>> for Range<usize> {
+    fn from(range: Range<isize>) -> Self {
+        Range::new(range.start as usize..range.end as usize)
+    }
+}
