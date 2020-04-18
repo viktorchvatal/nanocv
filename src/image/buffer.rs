@@ -1,4 +1,4 @@
-use super::{Img, ImgMut, ImgSize, ImgDimensions};
+use super::{Img, ImgMut, ImgSize, dimensions::ImgDimensions};
 
 /// Data buffer that stores image pixels and provides read access using
 /// `Img` trait and mutable write access via `ImgMut` trait

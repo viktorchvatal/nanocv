@@ -18,44 +18,44 @@ impl<T: Copy> Point<T> {
     /// # Examples
     ///
     /// ```
-    /// use nanocv::geometry::Point;
+    /// use nanocv::Point;
     /// let point = Point::<usize>::new(1, 2);
     /// assert_eq!(point.x, 1);
     /// assert_eq!(point.y, 2);
     /// ```
     /// Add two points
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(1, 2) + Point::new(2, 4), Point::new(3, 6));
     /// ```
     /// Subtract two points
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(1, 2) - Point::new(2, 4), Point::new(-1, -2));
     /// ```
     /// Dot product
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(1, 2)*Point::new(2, 4), 10);
     /// ```
     /// Add a scalar value
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(1, 2) + 1, Point::new(2, 3));
     /// ```
     /// Subtract a scalar value
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(1, 2) - 1, Point::new(0, 1));
     /// ```
     /// Multiply by a scalar value
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(1, 2)*2, Point::new(2, 4));
     /// ```
     /// Divide by a scalar value
     /// ```
-    /// # use nanocv::geometry::Point;
+    /// # use nanocv::Point;
     /// assert_eq!(Point::new(2, 4)/2, Point::new(1, 2));
     /// ```
     pub fn new(x: T, y: T) -> Point<T> { 

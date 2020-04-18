@@ -7,13 +7,13 @@ use super::Range;
 /// # Examples
 /// Create a new 2D range
 /// ```
-/// use nanocv::geometry::Range2d;
+/// use nanocv::Range2d;
 /// let range = Range2d::new(0..2, 1..4);
 /// ```
 /// 
 /// Test range bounds
 /// ```
-/// # use nanocv::geometry::Range2d;
+/// # use nanocv::Range2d;
 /// # let range = Range2d::new(0..2, 1..4);
 /// assert_eq!(range.x.start, 0);
 /// assert_eq!(range.x.end, 2);
@@ -23,7 +23,7 @@ use super::Range;
 /// 
 /// Test range width and height
 /// ```
-/// # use nanocv::geometry::Range2d;
+/// # use nanocv::Range2d;
 /// # let range = Range2d::new(0..2, 1..4);
 /// assert_eq!(range.width(), 2);
 /// assert_eq!(range.height(), 3);
@@ -37,7 +37,7 @@ pub struct Range2d<T> {
 impl<T: Copy> Range2d<T> {
     /// Create a new range from two system::ops::Range values
     /// ```
-    /// use nanocv::geometry::{Range, Range2d};
+    /// use nanocv::{Range, Range2d};
     /// let range = Range2d::new(0..2, 1..4);
     /// assert_eq!(range.x, Range::from(0..2));
     /// assert_eq!(range.y, Range::from(1..4));
@@ -50,7 +50,7 @@ impl<T: Copy> Range2d<T> {
 impl<T: Sub<Output=T> + Copy> Range2d<T> {
     /// Range width
     /// ```
-    /// use nanocv::geometry::Range2d;
+    /// use nanocv::Range2d;
     /// let range = Range2d::new(0..2, 1..4);
     /// assert_eq!(range.width(), 2);
     /// ```       
@@ -60,7 +60,7 @@ impl<T: Sub<Output=T> + Copy> Range2d<T> {
 
     /// Range height
     /// ```
-    /// use nanocv::geometry::Range2d;
+    /// use nanocv::Range2d;
     /// let range = Range2d::new(0..2, 1..4);
     /// assert_eq!(range.height(), 3);
     /// ```       
@@ -74,7 +74,7 @@ impl<T: Ord + Copy> Range2d<T> {
     ///
     /// # Example
     /// ```
-    /// use nanocv::geometry::Range2d;
+    /// use nanocv::Range2d;
     /// assert_eq!(
     ///     Range2d::new(0..2, 1..3).intersect(&Range2d::new(1..3, 2..5)),
     ///     Range2d::new(1..2, 2..3)
