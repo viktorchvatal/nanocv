@@ -1,7 +1,8 @@
 use super::ImgSize;
 
-/// Image pixel data and allocated data size
-pub struct ImgDimensions {
+/// Memory data layout of `ImgBuf` image
+#[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
+pub struct ImgBufLayout {
     /// Image data size specified by width and height
     pub size: ImgSize,
     /// Allocated image line width that can be larger than width to achieve
@@ -9,7 +10,7 @@ pub struct ImgDimensions {
     pub stride: usize,
 }
 
-impl ImgDimensions {
+impl ImgBufLayout {
     /// Number of allocated pixels
     pub fn data_length(&self) -> usize {
         self.size.y*self.stride
@@ -38,14 +39,14 @@ mod tests {
 
     #[test]
     fn assert_correct_data_size_should_be_ok() {
-        let dimensions = ImgDimensions { size: ImgSize::new(2, 2), stride: 3 };
+        let dimensions = ImgBufLayout { size: ImgSize::new(2, 2), stride: 3 };
         dimensions.assert_data_size_correct(6)
     }
 
     #[test]
     #[should_panic]
     fn assert_correct_data_size_invalid_length() {
-        let dimensions = ImgDimensions { size: ImgSize::new(2, 2), stride: 3 };
+        let dimensions = ImgBufLayout { size: ImgSize::new(2, 2), stride: 3 };
         dimensions.assert_data_size_correct(7)
     }    
 }

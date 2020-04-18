@@ -32,5 +32,6 @@ pub trait ImgMut<T>: Img<T> {
     fn line_mut(&mut self, line: usize) -> &mut [T];
 }
 
-/// Image width and height
+/// Image width and height, specifies an image data size for any
+/// Img and ImgMut implementations
 pub type ImgSize = Point<usize>;

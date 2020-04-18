@@ -63,6 +63,17 @@ impl<T: Copy> Point<T> {
     }
 }
 
+impl<T: Mul<T, Output=T>> Point<T> {
+    /// Product of vector elements
+    /// ```
+    /// use nanocv::Point;
+    /// assert_eq!(Point::new(3, 4).product(), 12);
+    /// ```    
+    pub fn product(self) -> T {
+        self.x*self.y
+    }
+}
+
 impl<T: Default> Default for Point<T> {
     fn default() -> Self {
         Self { x: T::default(), y: T::default() }

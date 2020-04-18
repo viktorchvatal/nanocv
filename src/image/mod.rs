@@ -6,3 +6,4 @@ mod dimensions;
 
 pub use traits::{Img, ImgMut, ImgSize};
 pub use buffer::{ImgBuf};
+pub use dimensions::{ImgBufLayout};
