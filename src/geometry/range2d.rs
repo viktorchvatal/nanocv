@@ -97,6 +97,6 @@ impl From<Range2d<isize>> for Range2d<usize> {
     }
 }
 
-/// Defines range within an image using signed i32 type to prevent 
+/// Defines range within an image using signed isize type to prevent 
 /// zero underflows
 pub type ImgRange = Range2d<isize>;
