@@ -5,4 +5,4 @@ mod vertical;
 mod plan;
 mod update;
 
-pub use update::update;
+pub use update::{update, update_range};
