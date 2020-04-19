@@ -55,9 +55,7 @@ fn iteration(
 
     FilterIteration { 
         src_range: Range::from(src_range),
-        dst_range: Range::from(
-            Range::new((src_range.start - shift)..(src_range.end - shift))
-        ),
+        dst_range: Range::from(Range::new((src_range.start - shift)..(src_range.end - shift))),
         kernel_index: (levels - shift) as usize,
         outside_start: max(0, - (start + shift)) as usize,
         outside_end: max(0, end - length + shift) as usize,
