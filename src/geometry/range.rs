@@ -51,6 +51,12 @@ impl<T> Range<T> {
     }
 }
 
+impl<T: Copy> Range<T> {
+    pub fn to_range(&self) -> std::ops::Range<T> {
+        self.start..self.end
+    }
+}
+
 impl<T: Sub<Output=T> + Copy> Range<T> {
     /// Range length (number of elements a range includes)
     /// ```
@@ -66,6 +72,12 @@ impl<T: Sub<Output=T> + Copy> Range<T> {
 impl<T> From<std::ops::Range<T>> for Range<T> {
     fn from(range: std::ops::Range<T>) -> Self {
         Self::new(range)
+    }
+}
+
+impl<T> From<Range<T>> for std::ops::Range<T> {
+    fn from(range: Range<T>) -> Self {
+        range.start..range.end
     }
 }
 

@@ -46,6 +46,26 @@ impl<T: Copy> Range2d<T> {
     pub fn new(x: std::ops::Range<T>, y: std::ops::Range<T>) -> Self {
         Self { x: Range::new(x), y: Range::new(y) }
     }
+
+    /// Start 2D vector of the range
+    /// ```
+    /// use nanocv::{Range2d, Vec2d};
+    /// let range = Range2d::new(0..2, 1..4);
+    /// assert_eq!(range.start(), Vec2d::new(0, 1));
+    /// ```    
+    pub fn start(&self) -> Vec2d<T> {
+        Vec2d::new(self.x.start, self.y.start)
+    }
+
+    /// End 2D vector of the range
+    /// ```
+    /// use nanocv::{Range2d, Vec2d};
+    /// let range = Range2d::new(0..2, 1..4);
+    /// assert_eq!(range.end(), Vec2d::new(2, 4));
+    /// ```    
+    pub fn end(&self) -> Vec2d<T> {
+        Vec2d::new(self.x.end, self.y.end)
+    }    
 }
 
 impl<T: Sub<Output=T> + Copy> Range2d<T> {

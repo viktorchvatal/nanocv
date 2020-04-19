@@ -1,4 +1,5 @@
 use super::{Img, ImgMut, ImgSize, dimensions::ImgBufLayout};
+use std::fmt::{Formatter, Debug, Error};
 
 /// Data buffer for image pixels providing read access using
 /// `Img` trait and write access via `ImgMut` trait
@@ -112,5 +113,23 @@ impl<T: Copy + Default> ImgBuf<T> {
     /// ```
     pub fn new(size: ImgSize) -> Self {
         Self::from_vec(size, vec![T::default(); size.product()])
+    }
+}
+
+impl<T: Debug> Debug for ImgBuf<T> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "Image size: {:?} [\n", self.dimensions)?;
+
+        for line in 0..self.height() {
+            let line_pixels = self.line_ref(line);
+
+            for value in line_pixels {
+                write!(f, "{:5?}", value)?;
+            }
+            write!(f, "\n")?;
+        }
+        
+        write!(f, "]\n")?;
+        Ok(())
     }
 }
