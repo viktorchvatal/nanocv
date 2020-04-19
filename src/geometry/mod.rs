@@ -5,5 +5,5 @@ mod range;
 mod range2d;
 
 pub use range::Range;
-pub use range2d::Range2d;
+pub use range2d::{Range2d, ImgRange};
 pub use point::Point;

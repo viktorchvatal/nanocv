@@ -1,4 +1,4 @@
-use crate::geometry::{Range2d, Point};
+use crate::{ImgRange, geometry::{Range2d, Point}};
 
 /// Read-only access to image pixels, usually used as input data
 pub trait Img<T> {
@@ -19,7 +19,7 @@ pub trait Img<T> {
     fn height(&self) -> usize  { self.size().y }
 
     /// Image size as a 2-dimensional range
-    fn range(&self) -> Range2d<isize> {
+    fn range(&self) -> ImgRange {
         Range2d::new(0..self.width() as isize, 0..self.height() as isize)
     }
 }

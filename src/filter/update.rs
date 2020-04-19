@@ -1,8 +1,8 @@
-
-
-use crate::{Range2d, ImgMut};
+use crate::{Range2d, ImgMut, ImgRange};
 
 /// Update specific range of the given image using an operator
+/// 
+/// Out of range pixels are ignored.
 /// 
 /// # Examples
 ///
@@ -14,7 +14,7 @@ use crate::{Range2d, ImgMut};
 /// assert_eq!(img.line_ref(0), &[2, 2]);
 /// assert_eq!(img.line_ref(1), &[3, 4]);
 /// ```
-pub fn update_range<T: Copy, F>(image: &mut dyn ImgMut<T>, range: Range2d<isize>, operator: F) 
+pub fn update_range<T: Copy, F>(image: &mut dyn ImgMut<T>, range: ImgRange, operator: F) 
 where F : Fn(T) -> T {
     // Assure that range is within image
     let range = Range2d::<usize>::from(range.intersect(image.range()));
@@ -44,4 +44,18 @@ pub fn update<T: Copy, F>(image: &mut dyn ImgMut<T>, operator: F)
 where F : Fn(T) -> T {
     let range = image.range();  
     update_range(image, range, operator)
+}
+
+// ================================== TESTS ==================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{ImgSize, ImgBuf};
+
+    #[test]
+    fn test_image_update_0x0_does_not_panic() {
+        let mut image = ImgBuf::<u8>::new(ImgSize::new(0, 0));
+        update(&mut image, |x| x);
+    }
 }
