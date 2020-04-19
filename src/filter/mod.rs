@@ -7,4 +7,4 @@ mod update;
 mod map;
 
 pub use update::{update, update_range};
-pub use map::{map_range};
+pub use map::{map, map_range};
