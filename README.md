@@ -8,7 +8,7 @@
 
 ### Motivation
 
- * Well, i wanted to make it myself ;)
+ * Well, I wanted to make it myself ;)
 
 ### Primary goals
 
