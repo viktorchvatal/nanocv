@@ -5,8 +5,8 @@ use super::ImgSize;
 pub struct ImgBufLayout {
     /// Image data size specified by width and height
     pub size: ImgSize,
-    /// Allocated image line width that can be larger than width to achieve
-    /// data alignment, `stride >= width`
+    /// Allocated image line size (stride) that can be larger than 
+    /// image data width to achieve better data alignment
     pub stride: usize,
 }
 
