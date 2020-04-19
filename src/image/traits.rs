@@ -1,4 +1,4 @@
-use crate::{ImgRange, geometry::{Range2d, Point}};
+use crate::{ImgRange, geometry::{Range2d, Vec2d}};
 
 /// Read-only access to image pixels, usually used as input data
 pub trait Img<T> {
@@ -34,4 +34,4 @@ pub trait ImgMut<T>: Img<T> {
 
 /// Image width and height, specifies an image data size for any
 /// Img and ImgMut implementations
-pub type ImgSize = Point<usize>;
+pub type ImgSize = Vec2d<usize>;
