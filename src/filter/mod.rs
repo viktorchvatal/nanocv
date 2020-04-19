@@ -14,6 +14,13 @@
 //!  * functions with `_new` suffix automatically create new output image
 //!    buffer of `ImgBuf` type and do not require output buffer to be specified,
 //!    however, no other buffer type constructors are supported
+//! 
+//! Notable function families are:
+//!  * `update` - update image pixels in place:
+//!    [update](fn.update.html), [update_range](fn.update_range.html)
+//!  * `map` - map pixels from one image to another:
+//!    [map](fn.map.html), [map_range](fn.map_range.html), 
+//!    [map_new](fn.map_new.html)
 
 mod update;
 mod map;
