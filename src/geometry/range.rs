@@ -82,11 +82,11 @@ impl<T: Ord + Copy> Range<T> {
     /// ```
     /// use nanocv::Range;
     /// assert_eq!(
-    ///     Range::new(1..3).intersect(&Range::new(2..4)),
+    ///     Range::new(1..3).intersect(Range::new(2..4)),
     ///     Range::new(2..3)
     /// );
     /// ```
-    pub fn intersect(&self, other: &Range<T>) -> Self {
+    pub fn intersect(&self, other: Range<T>) -> Self {
         Self::new(max(self.start, other.start)..min(self.end, other.end))
     }
 }

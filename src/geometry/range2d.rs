@@ -76,14 +76,23 @@ impl<T: Ord + Copy> Range2d<T> {
     /// ```
     /// use nanocv::Range2d;
     /// assert_eq!(
-    ///     Range2d::new(0..2, 1..3).intersect(&Range2d::new(1..3, 2..5)),
+    ///     Range2d::new(0..2, 1..3).intersect(Range2d::new(1..3, 2..5)),
     ///     Range2d::new(1..2, 2..3)
     /// );
     /// ```
-    pub fn intersect(&self, other: &Range2d<T>) -> Self {
+    pub fn intersect(&self, other: Range2d<T>) -> Self {
         Self {
-            x: self.x.intersect(&other.x),
-            y: self.y.intersect(&other.y),
+            x: self.x.intersect(other.x),
+            y: self.y.intersect(other.y),
+        }
+    }
+}
+
+impl From<Range2d<isize>> for Range2d<usize> {
+    fn from(range: Range2d<isize>) -> Self {
+        Self {
+            x: Range::from(range.x),
+            y: Range::from(range.y),
         }
     }
 }

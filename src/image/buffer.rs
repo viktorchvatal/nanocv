@@ -68,8 +68,8 @@ impl<T: Copy> ImgBuf<T> {
     ///     ImgBufLayout { size: ImgSize::new(1, 2), stride: 2 }, 
     ///     vec![1, 2, 3, 4]
     /// );
-    /// assert_eq!(buf.line_ref(0), &[1u8]);
-    /// assert_eq!(buf.line_ref(1), &[3u8]);
+    /// assert_eq!(buf.line_ref(0), &[1]);
+    /// assert_eq!(buf.line_ref(1), &[3]);
     /// ```
     pub fn from_vec_stride(dimensions: ImgBufLayout, pixels: Vec<T>) -> Self {
         dimensions.assert_data_size_correct(pixels.len());
@@ -83,8 +83,8 @@ impl<T: Copy> ImgBuf<T> {
     /// ```
     /// use nanocv::{ImgBuf, Img, ImgSize};
     /// let buf = ImgBuf::<u8>::from_vec(ImgSize::new(2, 2), vec![1, 2, 3, 4]);
-    /// assert_eq!(buf.line_ref(0), &[1u8, 2u8]);
-    /// assert_eq!(buf.line_ref(1), &[3u8, 4u8]);
+    /// assert_eq!(buf.line_ref(0), &[1, 2]);
+    /// assert_eq!(buf.line_ref(1), &[3, 4]);
     /// ```
     pub fn from_vec(size: ImgSize, data: Vec<T>) -> Self {
         Self::from_vec_stride(ImgBufLayout { size, stride: size.x}, data)
@@ -94,8 +94,8 @@ impl<T: Copy> ImgBuf<T> {
     /// ```
     /// use nanocv::{ImgBuf, Img, ImgSize};
     /// let buf = ImgBuf::<u8>::new_init(ImgSize::new(2, 2), 7u8);
-    /// assert_eq!(buf.line_ref(0), &[7u8, 7u8]);
-    /// assert_eq!(buf.line_ref(1), &[7u8, 7u8]);
+    /// assert_eq!(buf.line_ref(0), &[7, 7]);
+    /// assert_eq!(buf.line_ref(1), &[7, 7]);
     /// ```
     pub fn new_init(size: ImgSize, init: T) -> Self {
         Self::from_vec(size, vec![init; size.product()])
@@ -107,8 +107,8 @@ impl<T: Copy + Default> ImgBuf<T> {
     /// ```
     /// use nanocv::{ImgBuf, Img, ImgSize};
     /// let buf = ImgBuf::<u8>::new(ImgSize::new(3, 2));
-    /// assert_eq!(buf.line_ref(0), &[0u8, 0u8, 0u8]);
-    /// assert_eq!(buf.line_ref(1), &[0u8, 0u8, 0u8]);
+    /// assert_eq!(buf.line_ref(0), &[0, 0, 0]);
+    /// assert_eq!(buf.line_ref(1), &[0, 0, 0]);
     /// ```
     pub fn new(size: ImgSize) -> Self {
         Self::from_vec(size, vec![T::default(); size.product()])
