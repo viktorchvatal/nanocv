@@ -1,5 +1,5 @@
 use std::cmp::min;
-use crate::{ImgMut, Img, ImgRange, Range2d};
+use crate::{ImgMut, ImgBuf, Img, ImgRange, Range2d};
 
 /// Maps pixels from `input` at `input_range` into pixels
 /// in `output` image in `output_range`
@@ -114,6 +114,28 @@ pub fn map<TI: Copy, TO: Copy, F>(
     let output_range = output.range();
     map_range(input, output, input_range, output_range, operator);
 }
+
+/// Maps pixels from `input` image into newly created `ImgBuf` image with same size as `input`
+/// 
+/// # Example
+/// 
+/// Invert all pixels in image `input` and return result as `output`
+/// 
+/// ```
+/// use nanocv::{*, filter::map_new};
+/// let input = ImgBuf::<i8>::from_vec(ImgSize::new(2, 2), vec![1, 2, 3, 4]);
+/// let output = map_new(&input, |x| -x);
+/// assert_eq!(output, ImgBuf::<i8>::from_vec(input.size(), vec![-1, -2, -3 ,-4]))
+/// ```
+pub fn map_new<TI: Copy, TO: Copy + Default, F>(input: &dyn Img<TI>, mut operator: F) -> ImgBuf<TO> 
+where F: FnMut(TI) -> TO { 
+    let mut output = ImgBuf::new(input.size());
+    let input_range = input.range();
+    let output_range = output.range();
+    map_range(input, &mut output, input_range, output_range, |x, _| operator(x));
+    output
+}
+
 
 // ================================== TESTS ==================================
 
