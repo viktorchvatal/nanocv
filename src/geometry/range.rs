@@ -1,4 +1,4 @@
-use std::{cmp::{min, max}, ops::Sub};
+use std::{cmp::{min, max}, ops::{Add, Sub}};
 
 /// A half-open range bounded from start (inclusive) to end (exclusive).
 /// 
@@ -88,5 +88,39 @@ impl<T: Ord + Copy> Range<T> {
     /// ```
     pub fn intersect(&self, other: Range<T>) -> Self {
         Self::new(max(self.start, other.start)..min(self.end, other.end))
+    }
+}
+
+impl<T: Add<T, Output=T> + Copy> Add<T> for Range<T> {
+    type Output = Range<T>;
+
+    fn add(self, scalar: T) -> Range<T> {
+        Range {start: self.start + scalar, end: self.end + scalar}
+    }
+}
+
+impl<T: Sub<T, Output=T> + Copy> Sub<T> for Range<T> {
+    type Output = Range<T>;
+
+    fn sub(self, scalar: T) -> Range<T> {
+        Range {start: self.start - scalar, end: self.end - scalar}
+    }
+}
+
+// ================================== TESTS ==================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_range_add() {
+        assert_eq!(Range::new(1..3) + 2, Range::new(3..5));
+    }
+
+
+    #[test]
+    fn test_range_sub() {
+        assert_eq!(Range::new(1..3) - 1, Range::new(0..2));
     }
 }

@@ -1,6 +1,7 @@
 
-use std::ops::Sub;
+use std::ops::{Add, Sub};
 use super::Range;
+use crate::Vec2d;
 
 /// A two directional (half-open) range describing an area within an image.
 /// 
@@ -97,6 +98,46 @@ impl From<Range2d<isize>> for Range2d<usize> {
     }
 }
 
+impl<T: Add<T, Output=T> + Copy> Add<Vec2d<T>> for Range2d<T> {
+    type Output = Range2d<T>;
+
+    fn add(self, vector: Vec2d<T>) -> Range2d<T> {
+        Range2d { x: self.x + vector.x, y: self.y + vector.y }
+    }
+}
+
+impl<T: Sub<T, Output=T> + Copy> Sub<Vec2d<T>> for Range2d<T> {
+    type Output = Range2d<T>;
+
+    fn sub(self, vector: Vec2d<T>) -> Range2d<T> {
+        Range2d { x: self.x - vector.x, y: self.y - vector.y }
+    }
+}
+
 /// Defines range within an image using signed isize type to prevent 
 /// zero underflows
 pub type ImgRange = Range2d<isize>;
+
+// ================================== TESTS ==================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_range2d_add() {
+        assert_eq!(
+            Range2d::new(1..3, 2..5) + Vec2d::new(2, 1), 
+            Range2d::new(3..5, 3..6)
+        );
+    }
+
+
+    #[test]
+    fn test_range2d_sub() {
+        assert_eq!(
+            Range2d::new(1..3, 2..5) - Vec2d::new(2, 1), 
+            Range2d::new(-1..1, 1..4)
+        );
+    }
+}
