@@ -8,7 +8,7 @@
 //! to be created automatically, `map_new` convenient suits even better.
 //! 
 //! Following conventions are used among all filter functions:
-//!  * functions with `_range` suffix are usually the most powerfull,
+//!  * functions with `_range` suffix are usually the most powerful,
 //!    allowing a specific range for the filter to operate on, however,
 //!    not all functions support the feature
 //!  * functions with `_new` suffix automatically create new output image
