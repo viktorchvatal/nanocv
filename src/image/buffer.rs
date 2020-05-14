@@ -114,6 +114,19 @@ impl<T: Copy + Default> ImgBuf<T> {
     pub fn new(size: ImgSize) -> Self {
         Self::from_vec(size, vec![T::default(); size.product()])
     }
+
+    /// Create image buffer of the same type and same dimensions, as `other`
+    /// ```
+    /// use nanocv::{ImgBuf, Img, ImgSize};
+    /// let buf = ImgBuf::<u8>::new(ImgSize::new(3, 2));
+    /// assert_eq!(
+    ///     ImgBuf::new_like(&buf).size(),
+    ///     ImgSize::new(3, 2)
+    /// );
+    /// ```
+    pub fn new_like(other: &Self) -> Self {
+        Self::new(other.size())
+    }    
 }
 
 impl<T: Debug> Debug for ImgBuf<T> {
