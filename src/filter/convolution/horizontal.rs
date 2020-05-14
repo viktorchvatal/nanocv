@@ -67,7 +67,7 @@ where T: Add<T, Output=T> + Mul<T, Output=T> + Copy {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{ImgSize, ImgBuf};
+    use crate::{ImgSize, ImgBuf, Vec2d};
 
     fn test_image_1() -> ImgBuf<i16> {
         ImgBuf::from_vec(
@@ -140,5 +140,199 @@ mod tests {
               28,   30,   33,   35
             ],
         )    
-    );        
+    );       
+    
+    tst!(
+        conv_matrix_4x3_kernel_1_2_3, test_image_1(), [1, 2, 3], 
+        ImgBuf::from_vec(
+            ImgSize::new(4, 3), 
+            vec![
+                 7,   10,   16,   21,
+                31,   34,   40,   45,
+                55,   58,   64,   69,
+            ]
+        )
+    );
+
+    #[test]
+    fn conv_identity_to_larger_image() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), input.range(), convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                    1,  2,  3,  4, 0,
+                    5,  6,  7,  8, 0,
+                    9, 10, 11, 12, 0,               
+                    0,  0,  0,  0, 0,
+                ]
+            )            
+        );
+    }  
+    
+    #[test]
+    fn conv_identity_output_moved_down() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), 
+            input.range() + Vec2d::new(0, 1), 
+            convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                    0,  0,  0,  0, 0,
+                    1,  2,  3,  4, 0,
+                    5,  6,  7,  8, 0,
+                    9, 10, 11, 12, 0,               
+                ]
+            )            
+        );
+    }    
+    
+    #[test]
+    fn conv_identity_output_moved_down_more() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), 
+            input.range() + Vec2d::new(0, 2), 
+            convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                    0,  0,  0,  0, 0,
+                    0,  0,  0,  0, 0,
+                    1,  2,  3,  4, 0,
+                    5,  6,  7,  8, 0,
+                ]
+            )            
+        );
+    }      
+
+    #[test]
+    fn conv_identity_output_moved_up() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), 
+            input.range() + Vec2d::new(0, -1), 
+            convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                    5,  6,  7,  8, 0,
+                    9, 10, 11, 12, 0,               
+                    0,  0,  0,  0, 0,
+                    0,  0,  0,  0, 0,
+                ]
+            )            
+        );
+    }  
+    
+    #[test]
+    fn conv_identity_output_moved_right() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), 
+            input.range() + Vec2d::new(1, 0), 
+            convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                    0,  1,  2,  3,  4,
+                    0,  5,  6,  7,  8,
+                    0,  9, 10, 11, 12,               
+                    0,  0,  0,  0,  0,
+                ]
+            )            
+        );
+    }    
+    
+
+    #[test]
+    fn conv_identity_output_moved_right_more() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), 
+            input.range() + Vec2d::new(2, 0), 
+            convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                    0,  0,  1,  2,  3,
+                    0,  0,  5,  6,  7,
+                    0,  0,  9, 10, 11, 
+                    0,  0,  0,  0,  0,
+                ]
+            )            
+        );
+    }    
+    
+
+    #[test]
+    fn conv_identity_output_moved_left() {
+        let input = test_image_1();
+        let mut output = ImgBuf::new(ImgSize::new(5, 4));
+
+        horizontal_filter_range(
+            &input, &mut output, &[1], 
+            input.range(), 
+            input.range() + Vec2d::new(-1, 0), 
+            convolution_operator
+        );
+
+        assert_eq!(
+            output, 
+            ImgBuf::from_vec(
+                ImgSize::new(5, 4), 
+                vec![
+                     2,  3,  4, 0, 0,
+                     6,  7,  8, 0, 0,
+                    10, 11, 12, 0, 0,               
+                     0,  0,  0, 0, 0,
+                ]
+            )            
+        );
+    }      
 }
