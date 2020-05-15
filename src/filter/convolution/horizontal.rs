@@ -1,4 +1,4 @@
-use crate::{ImgMut, Img, ImgRange, Range2d};
+use crate::{ImgMut, Img, ImgRange, Range2d, ImageMapping};
 use std::{cmp::min, ops::{Mul, Add}};
 use super::plan::{create_filter_plan, FilterIteration};
 
@@ -10,19 +10,23 @@ pub fn horizontal_filter_range<T: Copy, F>(
     output_range: ImgRange, 
     operator: F
 ) where F: Fn(&[T], &mut [T], T) {
-    let range = Range2d::<usize>::from(input.range().intersect(input_range));
-    let (l, r, t, b) = (range.x.start, range.x.end, range.y.start, range.y.end);
-    let plan = create_filter_plan(input.width(), kernel.len(), l, r);
+    let mapping = ImageMapping::new(input_range, output_range, input.range(), output.range());
+    let (l, r) = (mapping.src.x.start, mapping.src.x.end);
 
-    for line in t..b {
-        let (src, dst) = (input.line_ref(line), output.line_mut(line));
+    let plan = create_filter_plan(
+        input.width(), kernel.len(), input_range.x, output_range.x
+    );
+
+    for line in mapping.src.y.to_range() {
+        let src = input.line_ref(line as usize);
+        let dst = output.line_mut((line as isize + mapping.shift.y) as usize);
 
         for index in 0..plan.len() {
             let ref bound: &FilterIteration = &plan[index];
             let value: T = kernel[bound.kernel_index];
 
             // Convolution with pixels outside image at the beginning
-            for outside in 0..min(range.width(), bound.outside_start) {
+            for outside in 0..min(mapping.src.width(), bound.outside_start) {
                 let src = &src[0..1];
                 let dst = &mut dst[(outside + l)..(outside + l + 1)];
                 operator(src, dst, value);
@@ -36,7 +40,7 @@ pub fn horizontal_filter_range<T: Copy, F>(
             }
 
             // Convolution with pixels outside image at the end
-            for outside in 0..min(range.width(), bound.outside_end) {
+            for outside in 0..min(mapping.src.width(), bound.outside_end) {
                 let col = r - outside - 1;
                 let src = &src[(input.width() - 1)..input.width()];
                 let dst = &mut dst[col..(col + 1)];

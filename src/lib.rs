@@ -3,7 +3,7 @@ mod image;
 
 // Essential types for nanocv are exported to root module of the crate
 pub use image::{Img, ImgMut, ImgSize, ImgBuf, ImgBufLayout};
-pub use geometry::{Range, Range2d, ImgRange, Vec2d};
+pub use geometry::{Range, Range2d, ImgRange, Vec2d, ImageMapping};
 
 // Specific algorithms and methods are defined in respective modules
 pub mod filter;

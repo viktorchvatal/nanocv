@@ -1,5 +1,5 @@
 use std::cmp::min;
-use crate::{ImgMut, ImgBuf, Img, ImgRange, Range2d};
+use crate::{ImgMut, ImgBuf, Img, ImgRange, Range2d, ImageMapping};
 
 /// Maps pixels from `input` at `input_range` into pixels
 /// in `output` image in `output_range`
@@ -53,21 +53,11 @@ pub fn map_range<TI: Copy, TO: Copy, F>(
     output_range: ImgRange,
     mut operator: F
 ) where F: FnMut(TI, TO) -> TO { 
-    let shift = output_range.start() - input_range.start();
+    let mapping = ImageMapping::new(input_range, output_range, input.range(), output.range());
 
-    let src_range = Range2d::<usize>::from(
-        input_range.intersect(input.range()).intersect(output.range() - shift)
-    );
-    
-    let dst_range = Range2d::<usize>::from(
-        output_range.intersect(output.range()).intersect(input.range() + shift)
-    );
-
-    let height = min(src_range.height(), dst_range. height());
-
-    for line in 0..height {
-        let src = &input.line_ref(src_range.y.start + line)[src_range.x.to_range()];
-        let dst = &mut output.line_mut(dst_range.y.start + line)[dst_range.x.to_range()];
+    for line in 0..mapping.src.height() {
+        let src = &input.line_ref(mapping.src.y.start + line)[mapping.src.x.to_range()];
+        let dst = &mut output.line_mut(mapping.dst.y.start + line)[mapping.dst.x.to_range()];
         let max = min(src.len(), dst.len());
 
         for column in 0..max {
