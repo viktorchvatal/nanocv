@@ -1,5 +1,5 @@
 use std::cmp::min;
-use crate::{ImgMut, ImgBuf, Img, ImgRange, Range2d, ImageMapping};
+use crate::{ImgMut, ImgBuf, Img, ImgRange, ImageMapping};
 
 /// Maps pixels from `input` at `input_range` into pixels
 /// in `output` image in `output_range`
@@ -100,9 +100,8 @@ pub fn map<TI: Copy, TO: Copy, F>(
     output: &mut dyn ImgMut<TO>,
     operator: F
 ) where F: FnMut(TI, TO) -> TO { 
-    let input_range = input.range();
     let output_range = output.range();
-    map_range(input, output, input_range, output_range, operator);
+    map_range(input, output, input.range(), output_range, operator);
 }
 
 /// Maps pixels from `input` image into newly created `ImgBuf` image with same size as `input`

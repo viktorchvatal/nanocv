@@ -1,7 +1,65 @@
-use crate::{ImgMut, Img, ImgRange, Range2d, ImageMapping, Range};
-use std::{cmp::min, ops::{Mul, Add}};
+use crate::{ImgMut, Img, ImgRange, ImageMapping, Range};
+use std::{cmp::min};
 use super::plan::{create_filter_plan, FilterIteration};
 
+/// Horizontal image filter for whole image
+/// 
+/// Input image is considered infinite, replicating values of 
+/// nearest existing pixels.
+/// 
+/// # Arguments
+///
+/// * `input` - input read-only image
+/// * `output` - output mutable image
+/// * `kernel` - filter kernel
+/// * `operator` - operator between input, output and kernel, for convolution
+///   filter, use `convolution_operator` function
+/// 
+/// # Example
+/// ```
+/// use nanocv::{*, filter::{horizontal_filter, convolution_operator}};
+/// 
+/// let input = ImgBuf::from_vec(
+///     ImgSize::new(3, 2), 
+///     vec![
+///         1,  2,  0,
+///         3,  4,  0,
+///     ]
+/// );
+/// 
+/// let mut output = ImgBuf::new_like(&input);
+/// let kernel = [0, 0, -1];
+/// horizontal_filter(&input, &mut output, &kernel, convolution_operator);
+/// 
+/// assert_eq!(
+///     output,
+///     ImgBuf::<i8>::from_vec(input.size(), vec![
+///         -1, -1, -2,
+///         -3, -3, -4,
+///     ])
+/// );
+/// ```
+pub fn horizontal_filter<T: Copy, F>(
+    input: &dyn Img<T>,
+    output: &mut dyn ImgMut<T>, 
+    kernel: &[T], 
+    operator: F
+) where F: Fn(&[T], &mut [T], T) {
+    let output_range = output.range();
+    horizontal_filter_range(input, output, kernel, input.range(), output_range, operator)
+}
+
+/// Horizontal image filter for specific range
+/// 
+/// # Arguments
+///
+/// * `input` - input read-only image
+/// * `output` - output mutable image
+/// * `kernel` - filter kernel
+/// * `input_range` - input pixel range
+/// * `output_range` - output pixel range
+/// * `operator` - operator between input, output and kernel, for convolution
+///   filter, use `convolution_operator` function
 pub fn horizontal_filter_range<T: Copy, F>(
     input: &dyn Img<T>,
     output: &mut dyn ImgMut<T>, 
@@ -52,28 +110,12 @@ pub fn horizontal_filter_range<T: Copy, F>(
     }
 }
 
-#[inline(never)]
-pub fn convolution_operator<T>(
-    src: &[T], 
-    dst: &mut [T],
-    kernel: T
-)
-where T: Add<T, Output=T> + Mul<T, Output=T> + Copy {
-    let max = min(src.len(), dst.len());
-    let src = &src[0..max];
-    let dst = &mut dst[0..max];
-
-    for index in 0..max {
-        dst[index] = dst[index] + kernel*src[index];
-    }
-}
-
 // ================================== TESTS ==================================
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{ImgSize, ImgBuf, Vec2d};
+    use crate::{ImgSize, ImgBuf, Vec2d, filter::convolution_operator};
 
     fn test_image_1() -> ImgBuf<i16> {
         ImgBuf::from_vec(
