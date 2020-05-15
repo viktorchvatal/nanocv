@@ -87,6 +87,12 @@ impl From<Range<isize>> for Range<usize> {
     }
 }
 
+impl From<Range<usize>> for Range<isize> {
+    fn from(range: Range<usize>) -> Self {
+        Self::new(range.start as isize..range.end as isize)
+    }
+}
+
 impl<T: Ord + Copy> Range<T> {
     /// Intersection of two ranges
     ///

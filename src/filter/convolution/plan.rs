@@ -36,26 +36,30 @@ pub fn create_filter_plan(
     let center = ((kernel_size - 1) / 2) as isize;
     let first = - (center as isize);
     let last = kernel_size as isize - center as isize;
+    let shift = dst.start - src.start;
 
     (first..last)
-        .map(|position| iteration(position, center, length as isize, src))
+        .map(|position| iteration(position, shift, center, length as isize, src))
         .collect()
 }
 
 fn iteration(
-    shift: isize, 
+    pos: isize, 
+    shift: isize,
     levels: isize, 
     length: isize, 
     src: Range<isize>,
 ) -> FilterIteration {
-    let src_range = Range::new(max(0, src.start + shift)..min(length, src.end + shift));
+    let src_range = Range::new(max(0, src.start + pos)..min(length, src.end + pos));
 
     FilterIteration { 
         src_range: Range::from(src_range),
-        dst_range: Range::from(Range::new((src_range.start - shift)..(src_range.end - shift))),
-        kernel_index: (levels - shift) as usize,
-        outside_start: max(0, - (src.start + shift)) as usize,
-        outside_end: max(0, src.end - length + shift) as usize,
+        dst_range: Range::from(
+            Range::new((src_range.start - pos + shift)..(src_range.end - pos + shift))
+        ),
+        kernel_index: (levels - pos) as usize,
+        outside_start: max(0, - (src.start + pos)) as usize,
+        outside_end: max(0, src.end - length + pos) as usize,
     }
 }
 

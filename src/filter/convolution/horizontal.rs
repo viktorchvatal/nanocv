@@ -1,4 +1,4 @@
-use crate::{ImgMut, Img, ImgRange, Range2d, ImageMapping};
+use crate::{ImgMut, Img, ImgRange, Range2d, ImageMapping, Range};
 use std::{cmp::min, ops::{Mul, Add}};
 use super::plan::{create_filter_plan, FilterIteration};
 
@@ -14,7 +14,9 @@ pub fn horizontal_filter_range<T: Copy, F>(
     let (l, r) = (mapping.src.x.start, mapping.src.x.end);
 
     let plan = create_filter_plan(
-        input.width(), kernel.len(), input_range.x, output_range.x
+        input.width(), kernel.len(), 
+        Range::<isize>::from(mapping.src.x), 
+        Range::<isize>::from(mapping.dst.x),
     );
 
     for line in mapping.src.y.to_range() {
