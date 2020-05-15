@@ -31,5 +31,6 @@ pub use map::{map, map_range, map_new};
 
 pub use convolution::{
     horizontal_filter_range, horizontal_filter, 
+    vertical_filter_range, vertical_filter,
     convolution_operator
 };
