@@ -14,7 +14,7 @@ fn main() {
     let kernel = [1, 1, 1, 1, 1, 1, 1, 1, 1];
     horizontal_filter(&img, &mut result, &kernel, convolution_operator);
     // Divide by 9 to fit into [0, 255] range
-    update(&mut result, |x| x/10);
+    update(&mut result, |x| x/9);
     // Convert back to 8-bit image 
     let result = map_new(&result, |x| x as u8);
     // Convert back to piston gray image

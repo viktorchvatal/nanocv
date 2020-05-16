@@ -76,7 +76,7 @@ fn main() {
 
 ### Horizontal and vertical convolution
 
-[See horizontal_convolution example - horizontal convolution](examples/horizontal_convolution.rs)
+[See horizontal_convolution example](examples/horizontal_convolution.rs)
 
 Horizontal convolution filter
 ```rust
@@ -99,4 +99,4 @@ fn main() {
 
 Vertical convolution is analogical to horizontal one
 
-[See vertical_convolution example - vertical convolution](examples/vertical_convolution.rs)
+[See vertical_convolution example](examples/vertical_convolution.rs)
