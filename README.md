@@ -36,7 +36,7 @@
 
 ### Loading and saving images
 
-[See full example](examples/load_save.rs)
+[See load_save example](examples/load_save.rs)
 
 `nanocv` is an image processing library, but lacks any image file loading / saving capabilities.
 It is, however, super easy to use another library for this. Most examples use `image` crate for this.
@@ -62,7 +62,7 @@ fn main() {
 
 ### Change pixel values in place
 
-[See full example](examples/negative_image.rs)
+[See negative_image example](examples/negative_image.rs)
 
 ```rust
 use nanocv::{ImgBuf, ImgSize, filter::update};
@@ -76,8 +76,7 @@ fn main() {
 
 ### Horizontal and vertical convolution
 
-[See full example - horizontal convolution](examples/horizontal_convolution.rs)
-[See full example - vertical convolution](examples/vertical_convolution.rs)
+[See horizontal_convolution example - horizontal convolution](examples/horizontal_convolution.rs)
 
 Horizontal convolution filter
 ```rust
@@ -97,3 +96,7 @@ fn main() {
     let _result = map_new(&result, |x| x as u8);
 }
 ```
+
+Vertical convolution is analogical to horizontal one
+
+[See vertical_convolution example - vertical convolution](examples/vertical_convolution.rs)
