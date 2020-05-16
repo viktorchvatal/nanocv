@@ -42,7 +42,8 @@
 It is, however, super easy to use another library for this. Most examples use `image` crate for this.
 
 Loading and image file into `ImgBuf` and saving result is as easy as
-```
+
+```rust
 use image::{open, GrayImage};
 use nanocv::{ImgBuf, ImgSize};
 
@@ -56,5 +57,43 @@ fn main() {
     let result = GrayImage::from_vec(size.x as u32, size.y as u32, img.into_vec()).unwrap();
     // Save result into target directory
     result.save("target/load_save.png").unwrap();
+}
+```
+
+### Change pixel values in place
+
+[See full example](examples/negative_image.rs)
+
+```rust
+use nanocv::{ImgBuf, ImgSize, filter::update};
+
+fn main() {
+    let mut img: ImgBuf<u8> = ImgBuf::new(ImgSize::new(100, 100));
+    // Compute negative image
+    update(&mut img, |x| 255 - x);
+}
+```
+
+### Horizontal and vertical convolution
+
+[See full example - horizontal convolution](examples/horizontal_convolution.rs)
+[See full example - vertical convolution](examples/vertical_convolution.rs)
+
+Horizontal convolution filter
+```rust
+use nanocv::{ImgBuf, ImgSize, filter::{map_new, horizontal_filter, convolution_operator, update}};
+
+fn main() {
+    let img: ImgBuf<u8> = ImgBuf::new(ImgSize::new(100, 100));
+    // Convert to 16-bit image buffer
+    let img = map_new(&img, |x| x as u16);
+    let mut result = ImgBuf::new_like(&img);
+    // Horizontal convolution filter
+    let kernel = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+    horizontal_filter(&img, &mut result, &kernel, convolution_operator);
+    // Divide by 9 to fit into [0, 255] range
+    update(&mut result, |x| x/10);
+    // Convert back to 8-bit image 
+    let _result = map_new(&result, |x| x as u8);
 }
 ```
