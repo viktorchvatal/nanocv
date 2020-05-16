@@ -7,4 +7,4 @@ license = "MIT/Apache-2.0"
 [dependencies]
 
 [dev-dependencies]
-image = { version = "0.23"}
+image = { version = "0.23", features = ["png", "jpeg"]}
