@@ -5,3 +5,6 @@ version = "0.1.0"
 license = "MIT/Apache-2.0"
 
 [dependencies]
+
+[dev-dependencies]
+image = { version = "0.23"}

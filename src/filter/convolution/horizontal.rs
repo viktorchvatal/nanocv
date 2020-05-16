@@ -11,7 +11,7 @@ use super::plan::{create_filter_plan, FilterIteration};
 ///
 /// * `input` - input read-only image
 /// * `output` - output mutable image
-/// * `kernel` - filter kernel
+/// * `kernel` - filter kernel, must contain odd number of elements
 /// * `operator` - operator between input, output and kernel, for convolution
 ///   filter, use `convolution_operator` function
 /// 
@@ -55,7 +55,7 @@ pub fn horizontal_filter<T: Copy, F>(
 ///
 /// * `input` - input read-only image
 /// * `output` - output mutable image
-/// * `kernel` - filter kernel
+/// * `kernel` - filter kernel, must contain odd number of elements
 /// * `input_range` - input pixel range
 /// * `output_range` - output pixel range
 /// * `operator` - operator between input, output and kernel, for convolution
@@ -68,6 +68,10 @@ pub fn horizontal_filter_range<T: Copy, F>(
     output_range: ImgRange, 
     operator: F
 ) where F: Fn(&[T], &mut [T], T) {
+    if kernel.len() % 2 == 0 {
+        panic!("Only kernels with odd number of elements are supported");
+    }
+
     let mapping = ImageMapping::new(input_range, output_range, input.range(), output.range());
     let (l, r) = (mapping.src.x.start, mapping.src.x.end);
 

@@ -48,9 +48,9 @@ impl<T> ImgBuf<T> {
     /// ```
     /// use nanocv::{ImgBuf, ImgSize};
     /// let buf = ImgBuf::<u8>::from_vec(ImgSize::new(2, 2), vec![1, 2, 3, 4]);
-    /// assert_eq!(buf.into_pixels(), vec![1, 2, 3, 4]);
+    /// assert_eq!(buf.into_vec(), vec![1, 2, 3, 4]);
     /// ```
-    pub fn into_pixels(self) -> Vec<T> {
+    pub fn into_vec(self) -> Vec<T> {
         self.pixels
     }
 }
