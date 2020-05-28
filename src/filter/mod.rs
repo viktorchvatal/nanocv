@@ -25,9 +25,11 @@
 mod update;
 mod map;
 mod convolution;
+mod resize;
 
 pub use update::{update, update_range};
 pub use map::{map, map_range, map_new};
+pub use resize::resize_nearest;
 
 pub use convolution::{
     horizontal_filter_range, horizontal_filter, 
