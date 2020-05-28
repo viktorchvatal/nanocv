@@ -26,13 +26,16 @@ mod update;
 mod map;
 mod convolution;
 mod resize;
+mod mirror;
 
 pub use update::{update, update_range};
 pub use map::{map, map_range, map_new};
-pub use resize::resize_nearest;
+pub use resize::resize_nearest_new;
 
 pub use convolution::{
     horizontal_filter_range, horizontal_filter, 
     vertical_filter_range, vertical_filter,
     convolution_operator
 };
+
+pub use mirror::{mirror_horizontal_new, mirror_vertical_new};

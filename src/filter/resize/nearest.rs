@@ -6,8 +6,8 @@ use crate::{ImgSize, ImgBuf, Img, ImgMut};
 /// * `image` - input image 
 /// * `size` - target image size
 #[inline(never)]
-pub fn resize_nearest<T: Copy + Default>(
-    image: &ImgBuf<T>,
+pub fn resize_nearest_new<T: Copy + Default>(
+    image: &dyn Img<T>,
     size: ImgSize
 ) -> ImgBuf<T> {
     let x_indices = scale_index_table(image.width(), size.x);
@@ -60,7 +60,7 @@ mod tests {
     #[test]
     fn scale_2x2_to_4x4() {
         assert_eq!(
-            resize_nearest(
+            resize_nearest_new(
                 &ImgBuf::from_vec(ImgSize::new(2, 2), vec![1, 2, 3, 4]), 
                 ImgSize::new(4, 4)
             ),
