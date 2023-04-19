@@ -1,11 +1,14 @@
 use super::ImgSize;
+#[cfg(feature = "serde")]
+use serde_derive::{Serialize, Deserialize};
 
 /// Memory data layout of `ImgBuf` image
 #[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct ImgBufLayout {
     /// Image data size specified by width and height
     pub size: ImgSize,
-    /// Allocated image line size (stride) that can be larger than 
+    /// Allocated image line size (stride) that can be larger than
     /// image data width to achieve better data alignment
     pub stride: usize,
 }
@@ -48,5 +51,5 @@ mod tests {
     fn assert_correct_data_size_invalid_length() {
         let dimensions = ImgBufLayout { size: ImgSize::new(2, 2), stride: 3 };
         dimensions.assert_data_size_correct(7)
-    }    
+    }
 }

@@ -1,15 +1,18 @@
 use super::{Img, ImgMut, ImgSize, dimensions::ImgBufLayout};
 use std::fmt::{Formatter, Debug, Error};
+#[cfg(feature = "serde")]
+use serde_derive::{Serialize, Deserialize};
 
 /// Data buffer for image pixels providing read access using
 /// `Img` trait and write access via `ImgMut` trait
-/// 
+///
 /// Basic buffer implementation does not have any requirements for pixel type
 /// `T`, but most functions require `T` to implement `Copy`
 #[derive(Clone, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct ImgBuf<T> {
     dimensions: ImgBufLayout,
-    /// Image pixels stored in a continous block of memory
+    /// Image pixels stored in a continuous block of memory
     pixels: Vec<T>
 }
 
@@ -19,7 +22,7 @@ impl<T> Img<T> for ImgBuf<T> {
 }
 
 impl<T> ImgMut<T> for ImgBuf<T> {
-    fn line_mut(&mut self, line: usize) -> &mut [T] {  
+    fn line_mut(&mut self, line: usize) -> &mut [T] {
         let range = self.line(line);
         &mut self.pixels[range]
     }
@@ -56,17 +59,17 @@ impl<T> ImgBuf<T> {
 }
 
 impl<T: Copy> ImgBuf<T> {
-    /// Create image buffer of given size and row stride initialized 
+    /// Create image buffer of given size and row stride initialized
     /// with provided data, if image width and stride are equal,
-    /// `from_vec` function is more convenient 
-    /// 
-    /// Data vector length must correspond to 
-    /// `dimensions.stride*dimensions.size.y`, otherwise this 
+    /// `from_vec` function is more convenient
+    ///
+    /// Data vector length must correspond to
+    /// `dimensions.stride*dimensions.size.y`, otherwise this
     /// function will panic
     /// ```
     /// use nanocv::{ImgBuf, Img, ImgSize, ImgBufLayout};
     /// let buf = ImgBuf::<u8>::from_vec_stride(
-    ///     ImgBufLayout { size: ImgSize::new(1, 2), stride: 2 }, 
+    ///     ImgBufLayout { size: ImgSize::new(1, 2), stride: 2 },
     ///     vec![1, 2, 3, 4]
     /// );
     /// assert_eq!(buf.line_ref(0), &[1]);
@@ -78,7 +81,7 @@ impl<T: Copy> ImgBuf<T> {
     }
 
     /// Create image buffer of given size initialized with provided data
-    /// 
+    ///
     /// Data vector length must correspond to image `size`,
     /// otherwise this function will panic
     /// ```
@@ -100,7 +103,7 @@ impl<T: Copy> ImgBuf<T> {
     /// ```
     pub fn new_init(size: ImgSize, init: T) -> Self {
         Self::from_vec(size, vec![init; size.product()])
-    }        
+    }
 }
 
 impl<T: Copy + Default> ImgBuf<T> {
@@ -126,7 +129,7 @@ impl<T: Copy + Default> ImgBuf<T> {
     /// ```
     pub fn new_like(other: &Self) -> Self {
         Self::new(other.size())
-    }    
+    }
 }
 
 impl<T: Debug> Debug for ImgBuf<T> {
@@ -141,7 +144,7 @@ impl<T: Debug> Debug for ImgBuf<T> {
             }
             write!(f, "\n")?;
         }
-        
+
         write!(f, "]\n")?;
         Ok(())
     }

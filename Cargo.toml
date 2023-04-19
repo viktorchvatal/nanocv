@@ -5,6 +5,13 @@ version = "0.1.0"
 license = "MIT/Apache-2.0"
 
 [dependencies]
+serde = { version = "1", optional = true }
+serde_derive = { version  = "1", optional = true }
 
 [dev-dependencies]
 image = { version = "0.23", features = ["png", "jpeg"]}
+
+[features]
+default = []
+# Enables serde serialization for image buffer
+serde = ["dep:serde", "dep:serde_derive"]
