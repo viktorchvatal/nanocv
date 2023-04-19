@@ -1,7 +1,10 @@
 use std::{fmt::{Formatter, Debug, Error}, ops::{Add, Sub, Mul, Div, Neg}};
+#[cfg(feature = "serde")]
+use serde_derive::{Serialize, Deserialize};
 
 /// General purpose two dimensional vector
 #[derive(Clone, Copy, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Vec2d<T> {
     pub x: T,
     pub y: T
@@ -58,8 +61,8 @@ impl<T: Copy> Vec2d<T> {
     /// # use nanocv::Vec2d;
     /// assert_eq!(Vec2d::new(2, 4)/2, Vec2d::new(1, 2));
     /// ```
-    pub fn new(x: T, y: T) -> Vec2d<T> { 
-        Vec2d { x, y } 
+    pub fn new(x: T, y: T) -> Vec2d<T> {
+        Vec2d { x, y }
     }
 }
 
@@ -68,7 +71,7 @@ impl<T: Mul<T, Output=T>> Vec2d<T> {
     /// ```
     /// use nanocv::Vec2d;
     /// assert_eq!(Vec2d::new(3, 4).product(), 12);
-    /// ```    
+    /// ```
     pub fn product(self) -> T {
         self.x*self.y
     }
